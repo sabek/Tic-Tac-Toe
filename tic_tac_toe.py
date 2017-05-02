@@ -42,7 +42,7 @@ class Board():
                     self.turn = 'X'
                     break
 
-    def check_game_end(self):
+    def check_new_game(self):
         while True:
             new_game = input ("Play another game? (y/n)")
             if new_game.lower() == 'n':
@@ -88,7 +88,7 @@ def main():
         the_board.print_board()
         the_board.chose_move()
         if not the_board.game_active:
-            the_board.check_game_end()
+            the_board.check_new_game()
 
     print("\n--------------------------------")
     results = "X wins:{:2}  O wins:{:2}  Ties:{:2}".format(the_board.score['X'], the_board.score['O'], the_board.score['T'])
