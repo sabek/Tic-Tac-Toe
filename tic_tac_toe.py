@@ -5,10 +5,8 @@ class Board():
     """Define the board in TIC TAC TOE"""
     def __init__(self):
         self.reset_board()
-        self.x_wins = 0
-        self.o_wins = 0
-        self.ties = 0
-#        self.winning_patterns = ([1,2,3], [4,5,6], [7, 8, 9])
+        self.score = {"O":0, "X":0, "T":0}
+        self.winning_patterns = [["1", "2","3"], ["4", "5","6"], ["7", "8", "9"], ["7", "4", "1"], ["8", "5", "2"],["9", "6", "3"], ["7", "5", "3"], ["9", "5", "1"]]
 
     def print_board(self):
         print(self.board['7'] + "|" + self.board['8'] + "|" + self.board['9'])
@@ -36,8 +34,7 @@ class Board():
                 print("That space is taken by " + self.board[move] + ".")
             else:
                 self.board[move] = self.turn
-                self.check_win()
-                self.check_tie()
+                self.compare_board()
                 if self.turn == 'X':
                     self.turn = 'O'
                     break
@@ -55,41 +52,32 @@ class Board():
                 self.game_active = True
             return
 
-    def check_tie(self):
+    def compare_board(self):
         if ' ' not in self.board.values():
-            self.update_scores(self, 'T')
-
-    def check_win(self):
-        if self.board['1'] == self.board['2'] == self.board['3'] and self.board['1'] != ' ':
-            self.update_scores('W')
-        elif self.board['4'] == self.board['5'] == self.board['6'] and self.board['4'] != ' ':
-            self.update_scores('W')
-        elif self.board['7'] == self.board['8'] == self.board['9'] and self.board['7'] != ' ':
-            self.update_scores('W')
-        elif self.board['7'] == self.board['4'] == self.board['1'] and self.board['7'] != ' ':
-            self.update_scores('W')
-        elif self.board['8'] == self.board['5'] == self.board['2'] and self.board['8'] != ' ':
-            self.update_scores('W')
-        elif self.board['9'] == self.board['6'] == self.board['3'] and self.board['9'] != ' ':
-            self.update_scores('W')
-        elif self.board['7'] == self.board['5'] == self.board['3'] and self.board['7'] != ' ':
-            self.update_scores('W')
-        elif self.board['9'] == self.board['5'] == self.board['1'] and self.board['9'] != ' ':
-            self.update_scores('W')
-        else:
+            self.update_scores('T')
+            self.game_active = False
             return
-        self.game_active = False
+        for cells in self.winning_patterns:
+            if self.check_win(cells):
+                self.update_scores('W')
+                self.game_active = False
+
+    def check_win(self, cells):
+        first = self.board[cells[0]]
+        if first == ' ':
+            return False
+        for cell in cells:
+            if self.board[cell] != first:
+                return False
+        return True
 
     def update_scores(self, result):
         if result == 'W':
             print(self.turn + " wins the game.")
-            if self.turn == 'X':
-                self.x_wins += 1
-            elif self.turn == 'O':
-                self.o_wins += 1
+            self.score[self.turn] += 1
         elif result == 'T':
             print ("This game is a tie.")
-            self.ties += 1
+            self.score['T'] += 1
 
 
 def main():
@@ -103,7 +91,7 @@ def main():
             the_board.check_game_end()
 
     print("\n--------------------------------")
-    results = "X wins: {:2}  O wins: {:2}  Ties: {:2}".format(the_board.x_wins, the_board.o_wins, the_board.ties)
+    results = "X wins:{:2}  O wins:{:2}  Ties:{:2}".format(the_board.score['X'], the_board.score['O'], the_board.score['T'])
     print(results)
     print("--------------------------------")
 
