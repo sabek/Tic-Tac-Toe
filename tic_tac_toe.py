@@ -102,7 +102,9 @@ def main():
         if not the_board.game_active:
             the_board.check_game_end()
 
-    results = "X wins: {} O wins: {} Ties: {}".format(the_board.x_wins, the_board.o_wins, the_board.ties)
+    print("\n--------------------------------")
+    results = "X wins: {:2}  O wins: {:2}  Ties: {:2}".format(the_board.x_wins, the_board.o_wins, the_board.ties)
     print(results)
+    print("--------------------------------")
 
 main()
